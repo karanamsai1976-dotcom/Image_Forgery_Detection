@@ -49,15 +49,29 @@ st.caption("Error Level Analysis (ELA) + CNN, trained on the CASIA2 dataset")
 uploaded_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
 
 if uploaded_file is not None:
-    image = Image.open(io.BytesIO(uploaded_file.getvalue())).convert("RGB")
+    file_bytes = uploaded_file.getvalue()
+
+    if not file_bytes:
+        st.error("The uploaded file appears to be empty. Please try uploading it again.")
+        st.stop()
+
+    try:
+        image = Image.open(io.BytesIO(file_bytes)).convert("RGB")
+    except Exception:
+        st.error(
+            "Couldn't read this file as an image. This usually means it isn't actually a "
+            "JPG/PNG (e.g. a HEIC photo from an iPhone renamed to .jpg, or a corrupted "
+            "download). Try re-exporting it as a JPG or PNG and uploading again."
+        )
+        st.stop()
 
     label, confidence, ela_image, probabilities = predict(image)
 
     col1, col2 = st.columns(2)
     with col1:
-        st.image(image, caption="Uploaded image", use_container_width=True)
+        st.image(image, caption="Uploaded image", width="stretch")
     with col2:
-        st.image(ela_image, caption="ELA (what the model sees)", use_container_width=True)
+        st.image(ela_image, caption="ELA (what the model sees)", width="stretch")
 
     st.subheader("Prediction")
     if label == "Forged":
