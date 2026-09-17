@@ -49,7 +49,7 @@ st.caption("Error Level Analysis (ELA) + CNN, trained on the CASIA2 dataset")
 uploaded_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
 
 if uploaded_file is not None:
-    image = Image.open(uploaded_file).convert("RGB")
+    image = Image.open(io.BytesIO(uploaded_file.getvalue())).convert("RGB")
 
     label, confidence, ela_image, probabilities = predict(image)
 
