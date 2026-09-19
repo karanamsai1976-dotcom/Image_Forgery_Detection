@@ -27,3 +27,4 @@ The project utilizes the **CASIA2 dataset**, containing:
 
 ## 📊 Results
 This project achieved an accuracy of **90%** and **97.9%** of recall value in finding whether the input image is forged or not.
+
